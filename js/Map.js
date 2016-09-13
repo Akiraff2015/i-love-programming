@@ -101,7 +101,8 @@
         document.addEventListener('keydown', function (e) {
             //Press 'a'
             if (e.keyCode == 65) {
-                map[2+xPosition] = 14;
+                map[2+xPosition][0
+                    ] = 14;
                 drawMap(map, 0);
                 xPosition--;
             }
