@@ -1,21 +1,21 @@
 ($(function() {
     var tilesetImage = new Image();
     tilesetImage.src = 'img/tiles3.png';
+    var TILE_SIZE = 32;
+    var imageNumTiles = 6;
 
     var canvas = document.getElementById('main');
     var ctx = canvas.getContext('2d');
-    var tileSize = 32;
-    var imageNumTiles = 6;
-    var yPosition = 0;
 
     var bufferImage = document.getElementById('render');
-    var ctxBuffer = canvas.getContext('2d');
+    var ctxBuffer = bufferImage.getContext('2d');
 
+    var yPosition = 0;
 
     var map = [
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
-        [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
+        [flareon.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
         [grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId()]
     ];
 
@@ -24,12 +24,13 @@
         var rowTileCount = map.length;
         var colTileCount = map[0].length;
 
+        //Crops the image at specific location (spritesheet)
         for (var r = 0; r < rowTileCount; r++) {
             for (var c = 0; c < colTileCount; c++) {
                 var tile = map[r][c];
                 var tileRow = (tile / imageNumTiles) | 0;
                 var tileCol = (tile % imageNumTiles) | 0;
-                ctx.drawImage(tilesetImage, (tileCol * tileSize), (tileRow * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize);
+                ctx.drawImage(tilesetImage, (tileCol * TILE_SIZE), (tileRow * TILE_SIZE), TILE_SIZE, TILE_SIZE, (c * TILE_SIZE), (r * TILE_SIZE), TILE_SIZE, TILE_SIZE);
             }
         }
     }
@@ -71,25 +72,26 @@
         return tempRowMap;
     }
 
-    function moveMap() {
-        //TODO: Generate new rows of map
-        yPosition++;
-        translate(0, yPosition);
-        console.log(yPosition);
-    }
+    //TODO: Generate new rows
+    //function moveMap() {
+    //    yPosition--;
+    //    translate(0, yPosition);
+    //    console.log(yPosition);
+    //}
 
     function keyboard() {
         document.addEventListener('keydown', function (e) {
             //Press 'a'
             if (e.keyCode == 65) {
                 console.log("a");
+                console.log(map[2][0]);
             }
 
             //TODO: Able to move down
             //Press 's'
             if (e.keyCode == 83) {
-                // shift everything to the left:
-                moveMap();
+                // shift everything to the top
+                //moveMap();
                 console.log("s");
             }
 
@@ -99,7 +101,10 @@
 
             }
 
+            //Press 'd'
             if (e.keyCode == 68) {
+                //FIND THE CURRENT POSITION OF THE CHARACTER
+                console.log(map[2].indexOf(14));
                 console.log("d");
             }
         });
@@ -120,9 +125,8 @@
         requestAnimFrame(animloop);
     })();
 
-    for (var i = 0; i < 25; i++) {
+    keyboard();
+    for (var i = 0; i < 20; i++) {
         drawMap(generateRow());
     }
-
-    keyboard();
 }));
