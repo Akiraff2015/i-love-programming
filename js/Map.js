@@ -1,12 +1,16 @@
 ($(function() {
     var tilesetImage = new Image();
     tilesetImage.src = 'img/tiles3.png';
-    //tilesetImage.onload = init;
 
     var canvas = document.getElementById('main');
     var ctx = canvas.getContext('2d');
     var tileSize = 32;
     var imageNumTiles = 6;
+    var yPosition = 0;
+
+    var bufferImage = document.getElementById('render');
+    var ctxBuffer = canvas.getContext('2d');
+
 
     var map = [
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
@@ -29,17 +33,25 @@
             }
         }
     }
+
+    //TODO: Translation
+    function translate(x, y) {
+        ctxBuffer.clearRect(0, 0, bufferImage.width, bufferImage.height);
+        ctxBuffer.drawImage(canvas, 0, 0);
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+        ctx.drawImage(bufferImage, x, y);
+    }
+
+
     //Gives a probability of a chance, of a tile being placed.
     function buildTile() {
         var tileType = [borderRock, greenOre, blueRock];
         var rand = Math.random();
         if (tileType[1].getProbability() > rand) {
-            console.log(rand);
             return tileType[1].getId();
         }
 
         if (tileType[2].getProbability() > rand) {
-            console.log(rand);
             return tileType[2].getId();
         }
 
@@ -47,7 +59,6 @@
             return tileType[0].getId();
         }
     }
-
 
     //TODO: Generate 1 random row. When key is pressed
     function generateRow() {
@@ -60,6 +71,13 @@
         return tempRowMap;
     }
 
+    function moveMap() {
+        //TODO: Generate new rows of map
+        yPosition++;
+        translate(0, yPosition);
+        console.log(yPosition);
+    }
+
     function keyboard() {
         document.addEventListener('keydown', function (e) {
             //Press 'a'
@@ -67,11 +85,11 @@
                 console.log("a");
             }
 
+            //TODO: Able to move down
             //Press 's'
             if (e.keyCode == 83) {
-                var imageData = ctx.getImageData(1, 0, ctx.canvas.width - 1, ctx.canvas.height);
-                ctx.putImageData(imageData, 0, 0);
-                ctx.clearRect(ctx.canvas.width-1, 0, 1, ctx.canvas.height);
+                // shift everything to the left:
+                moveMap();
                 console.log("s");
             }
 
@@ -97,14 +115,14 @@
             };
     })();
 
-
     //Animation Handler
     (function animloop() {
         requestAnimFrame(animloop);
-        keyboard();
     })();
 
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 25; i++) {
         drawMap(generateRow());
     }
+
+    keyboard();
 }));
