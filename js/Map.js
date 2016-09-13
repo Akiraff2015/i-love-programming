@@ -11,6 +11,7 @@
     var ctxBuffer = bufferImage.getContext('2d');
 
     var yPosition = 0;
+    var xPosition = 0;
 
     var map = [
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
@@ -19,18 +20,36 @@
         [grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId()]
     ];
 
-    function drawMap(getMapRow) {
-        map.push(getMapRow);
-        var rowTileCount = map.length;
-        var colTileCount = map[0].length;
+    function drawMap(getMapRow, condition) {
 
-        //Crops the image at specific location (spritesheet)
-        for (var r = 0; r < rowTileCount; r++) {
-            for (var c = 0; c < colTileCount; c++) {
-                var tile = map[r][c];
-                var tileRow = (tile / imageNumTiles) | 0;
-                var tileCol = (tile % imageNumTiles) | 0;
-                ctx.drawImage(tilesetImage, (tileCol * TILE_SIZE), (tileRow * TILE_SIZE), TILE_SIZE, TILE_SIZE, (c * TILE_SIZE), (r * TILE_SIZE), TILE_SIZE, TILE_SIZE);
+        if (condition == 1) {
+            map.push(getMapRow);
+            var rowTileCount = map.length;
+            var colTileCount = map[0].length;
+
+            //Crops the image at specific location (spritesheet)
+            for (var r = 0; r < rowTileCount; r++) {
+                for (var c = 0; c < colTileCount; c++) {
+                    var tile = map[r][c];
+                    var tileRow = (tile / imageNumTiles) | 0;
+                    var tileCol = (tile % imageNumTiles) | 0;
+                    ctx.drawImage(tilesetImage, (tileCol * TILE_SIZE), (tileRow * TILE_SIZE), TILE_SIZE, TILE_SIZE, (c * TILE_SIZE), (r * TILE_SIZE), TILE_SIZE, TILE_SIZE);
+                }
+            }
+        }
+
+        else {
+            var row = map.length;
+            var col = map[0].length;
+
+            //Crops the image at specific location (spritesheet)
+            for (var r = 0; r < row; r++) {
+                for (var c = 0; c < col; c++) {
+                    var tile = map[r][c];
+                    var tileRow = (tile / imageNumTiles) | 0;
+                    var tileCol = (tile % imageNumTiles) | 0;
+                    ctx.drawImage(tilesetImage, (tileCol * TILE_SIZE), (tileRow * TILE_SIZE), TILE_SIZE, TILE_SIZE, (c * TILE_SIZE), (r * TILE_SIZE), TILE_SIZE, TILE_SIZE);
+                }
             }
         }
     }
@@ -42,7 +61,6 @@
         ctx.clearRect(0,0, canvas.width, canvas.height);
         ctx.drawImage(bufferImage, x, y);
     }
-
 
     //Gives a probability of a chance, of a tile being placed.
     function buildTile() {
@@ -83,29 +101,32 @@
         document.addEventListener('keydown', function (e) {
             //Press 'a'
             if (e.keyCode == 65) {
-                console.log("a");
-                console.log(map[2][0]);
+                map[2+xPosition] = 14;
+                drawMap(map, 0);
+                xPosition--;
             }
 
             //TODO: Able to move down
             //Press 's'
             if (e.keyCode == 83) {
-                // shift everything to the top
-                //moveMap();
-                console.log("s");
+                map[2+xPosition][0] = 14;
+                drawMap(map, 0);
+                xPosition++;
             }
 
             //Press 'w'
             if (e.keyCode == 87) {
-                console.log("w");
+                map[2][yPosition] = 14;
+                drawMap(map, 0);
+                yPosition--;
 
             }
 
             //Press 'd'
             if (e.keyCode == 68) {
-                //FIND THE CURRENT POSITION OF THE CHARACTER
-                console.log(map[2].indexOf(14));
-                console.log("d");
+                map[2][yPosition] = 14;
+                drawMap(map, 0);
+                yPosition++;
             }
         });
     }
@@ -127,6 +148,6 @@
 
     keyboard();
     for (var i = 0; i < 20; i++) {
-        drawMap(generateRow());
+        drawMap(generateRow(),1);
     }
 }));

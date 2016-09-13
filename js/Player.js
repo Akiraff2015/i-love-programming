@@ -6,6 +6,12 @@ var Player = function(name, id, posX, posY) {
     this.id = id;
     this.posX = 0;
     this.posY = 0;
+
+    var position = {
+        "row":0,
+        "col":4
+    };
+
 };
 
 Player.prototype.getId = function() {
@@ -27,5 +33,24 @@ Player.prototype.getY = function() {
 Player.prototype.setY = function() {
     this.posY = posY;
 };
+
+Player.prototype.down = function(){
+    position.row++;
+    // calculate x, y of postion.row / position.col;
+
+};
+
+Player.prototype.up = function () {
+
+};
+
+Player.prototype.left = function () {
+
+};
+
+Player.prototype.right = function () {
+
+};
+
 
 var flareon = new Player("Flareon", 14);
