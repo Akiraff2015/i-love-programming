@@ -1,7 +1,8 @@
 /**
  * Created by Akira on 9/13/2016.
  */
-var Player = function (name, id, posX, posY) {
+
+var Player = function (name, id) {
     this.name = name;
     this.id = id;
     this.position = {

@@ -1,6 +1,7 @@
 /**
  * Created by Akira on 9/12/2016.
  */
+    //Added score and price
 var Rock = function (name, price, breakable, id, chance, walkable, score) {
     //Properties of rock
     this.name = name;
@@ -55,7 +56,7 @@ var borderRock = new Rock("Border Rock", 0, true, 19, 0.2, null, 20);
 var ice = new Rock("Ice", 100, true, 18, 0.11, null, 100);
 
 //Green rock
-var greenOre = new Rock("Green Ore", 100, true, 9, 0.1, null, 750);
+var greenOre = new Rock("Green Ore", 1500, true, 9, 0.1, null, 750);
 
 //Blue Rock
-var blueRock = new Rock("Blue Rock", 2000, true, 36, 0.11, 1500);
+var blueRock = new Rock("Blue Rock", 1000, true, 36, 0.11, 1500, 500);
