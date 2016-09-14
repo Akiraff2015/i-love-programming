@@ -1,7 +1,7 @@
 /**
  * Created by Akira on 9/12/2016.
  */
-($(function() {
+($(function () {
 
     //IMAGE PROPERTIES
     var tilesetImage = new Image();
@@ -27,15 +27,26 @@
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), flareon.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
-        [grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId()]
+        [grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId()]
     ];
+    var mainSong = new Audio("sound/8bit-adventure.mp3");
+    function playMainSong() {
+        mainSong.play();
+        mainSong.loop = true;
+    }
+
+    function stopMainSong() {
+        mainSong.pause();
+        mainSong.currentTime = 0;
+    }
 
     //GAME INITIALIZER
     function init() {
+        playMainSong();
         keyboard();
 
         for (var i = 0; i < 20; i++) {
-            drawMap(generateRow(),1);
+            drawMap(generateRow(), 1);
         }
     }
 
@@ -76,7 +87,7 @@
     function translate(x, y) {
         ctxBuffer.clearRect(0, 0, bufferImage.width, bufferImage.height);
         ctxBuffer.drawImage(canvas, 0, 0);
-        ctx.clearRect(0,0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(bufferImage, x, y);
     }
 
@@ -102,7 +113,7 @@
         var tempRowMap = [];
 
         //Generate random tile for each column.
-        for (var i = 0; i < map[0].length; i++ ) {
+        for (var i = 0; i < map[0].length; i++) {
             tempRowMap.push(buildTile().getId());
         }
         return tempRowMap;
@@ -116,29 +127,37 @@
     //}
 
     //TODO: Detect collision between the rocks.
-    function detectCollision(row, col) {
-        //console.log("TEST ", map[row][col]);
-        //IF WALKABLE
-        //BREAK THE ROCK
+    function detectCollision() {
+        if (playerPos.col < 0) {
+            playerPos.col = 0;
+        }
 
-        //ADD POINTS
-        //REPLACE AIR BLOCK
+        else if (playerPos.col > 27) {
+            playerPos.col = 27;
+        }
 
-        //ELSE
+        else if (playerPos.row <= 0) {
+            playerPos.row = 1;
+        }
+
+        else  if (playerPos.row >= 19) {
+            playerPos.row = 19;
+        }
     }
 
-    function clearPlayerSquare(){
+    function clearPlayerSquare() {
         playerPos = flareon.getPosition();
         map[playerPos.row][playerPos.col] = test10.getId();
-        drawMap(map,null);
+        drawMap(map, null);
     }
 
-    function move(){
+    function move() {
         playerPos = flareon.getPosition();
         var positionValue = map[playerPos.row][playerPos.col];
 
-        //UPDATE SCORE and MONEY
-        switch(positionValue) {
+        detectCollision();
+
+        switch (positionValue) {
             case blueRock.getId():
                 money += blueRock.getPrice();
                 score += blueRock.getScore();
@@ -162,7 +181,7 @@
                 console.log("Money: ", money);
         }
         map[playerPos.row][playerPos.col] = flareon.getId();
-        drawMap(map,null);
+        drawMap(map, null);
     }
 
     function drawScore() {
@@ -179,7 +198,7 @@
 
             var keyValue = e.keyCode;
             clearPlayerSquare();
-            switch(keyValue) {
+            switch (keyValue) {
                 case 65:
                     flareon.left();
                     break;
@@ -208,6 +227,7 @@
 
     var justDoIt = new Audio("sound/justdoit.mp3");
     var moneySound = new Audio("sound/money.mp3");
+
     function justdoit() {
         justDoIt.play();
     }
@@ -222,25 +242,26 @@
         moneySound.play();
     }
 
-    window.requestAnimFrame = (function(){
-        return  window.requestAnimationFrame       ||
+    window.requestAnimFrame = (function () {
+        return window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            function( callback ){
+            window.mozRequestAnimationFrame ||
+            function (callback) {
                 window.setTimeout(callback, 1000 / 60);
             };
     })();
 
-    (function animloop(){
+    (function animloop() {
         requestAnimFrame(animloop);
         drawScore();
     })();
 
-    $("#commandForm").submit(function(e) {
+    $("#commandForm").submit(function (e) {
         var getText = $("#getText").val();
 
         if (getText.localeCompare("tnt") == 0) {
             tnt();
+
         }
 
         else if (getText.localeCompare("justdoit") == 0) {
@@ -249,14 +270,20 @@
 
         else if (getText.localeCompare("stop") == 0) {
             stop();
-        }
-
-        else if (getText.localeCompare("ineedsomemoney") == 0) {
+        } else if (getText.localeCompare("ineedsomemoney") == 0) {
             moneyFunction();
         }
 
         else if (getText.localeCompare("givemepoints") == 0) {
             score = 999999999;
+        }
+
+        else if (getText.localeCompare("mute") == 0) {
+            stopMainSong();
+        }
+
+        else if (getText.localeCompare("playsong") == 0) {
+            playMainSong();
         }
 
         e.preventDefault();
