@@ -1,3 +1,42 @@
-.render {
-    opacity: 0;
+canvas {
+    display:block;
+}
+
+.smaller {
+    font-size: 12px;
+}
+
+#getText {
+    width:130px;
+}
+
+#submitButton {
+    float:right;
+    margin: 10px 0;
+}
+
+#main {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    background: #cccccc;
+    width: 1024px;
+    height: 640px;
+}
+
+#sidebar {
+    font-size: 16px;
+    float:left;
+    padding: 40px;
+    text-align: justify;
+    width: 200px;
+    height:auto;
+    background:black;
+    color:white;
+    display:inline-block;
+}
+
+.clear-float {
+    clear: both;
 }

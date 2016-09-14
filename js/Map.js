@@ -20,6 +20,7 @@
     //GLOBAL GAME PROPERTIES
     var score = 0;
     var money = 0;
+    var playerPos = flareon.getPosition();
 
     //DEFAULT MAP GENERATOR
     var map = [
@@ -29,8 +30,16 @@
         [grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId()]
     ];
 
-    function drawMap(getMapRow, condition) {
+    //GAME INITIALIZER
+    function init() {
+        keyboard();
 
+        for (var i = 0; i < 20; i++) {
+            drawMap(generateRow(),1);
+        }
+    }
+
+    function drawMap(getMapRow, condition) {
         if (condition == 1) {
             map.push(getMapRow);
             var rowTileCount = map.length;
@@ -110,22 +119,22 @@
     function detectCollision(row, col) {
         //console.log("TEST ", map[row][col]);
         //IF WALKABLE
-            //BREAK THE ROCK
+        //BREAK THE ROCK
 
-            //ADD POINTS
-            //REPLACE AIR BLOCK
+        //ADD POINTS
+        //REPLACE AIR BLOCK
 
         //ELSE
     }
 
     function clearPlayerSquare(){
-        var playerPos = flareon.getPosition();
+        playerPos = flareon.getPosition();
         map[playerPos.row][playerPos.col] = test10.getId();
         drawMap(map,null);
     }
 
     function move(){
-        var playerPos = flareon.getPosition();
+        playerPos = flareon.getPosition();
         var positionValue = map[playerPos.row][playerPos.col];
 
         //UPDATE SCORE and MONEY
@@ -154,7 +163,15 @@
         }
         map[playerPos.row][playerPos.col] = flareon.getId();
         drawMap(map,null);
+    }
 
+    function drawScore() {
+        var getPos = flareon.getPosition();
+        ctx.font = "12px Arial";
+        ctx.fillText("Score: " + score, 0, 20);
+        ctx.fillText("Money: $" + money, 400, 20);
+        ctx.fillText("x: " + getPos.col, 810, 20);
+        ctx.fillText("y: " + getPos.row, 850, 20);
     }
 
     function keyboard() {
@@ -177,14 +194,73 @@
                     break;
                 default:
                     console.log(keyValue);
-                    //console.log("Hey! Wrong keyboard");
+                //console.log("Hey! Wrong keyboard");
             }
             move();
         });
     }
 
-    keyboard();
-    for (var i = 0; i < 20; i++) {
-        drawMap(generateRow(),1);
+    function tnt() {
+        var tntSFX = new Audio("sound/explosion.wav");
+        tntSFX.play();
+
     }
+
+    var justDoIt = new Audio("sound/justdoit.mp3");
+    var moneySound = new Audio("sound/money.mp3");
+    function justdoit() {
+        justDoIt.play();
+    }
+
+    function stop() {
+        justDoIt.pause();
+        justDoIt.currentTime = 0;
+    }
+
+    function moneyFunction() {
+        money = 999999999;
+        moneySound.play();
+    }
+
+    window.requestAnimFrame = (function(){
+        return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+            };
+    })();
+
+    (function animloop(){
+        requestAnimFrame(animloop);
+        drawScore();
+    })();
+
+    $("#commandForm").submit(function(e) {
+        var getText = $("#getText").val();
+
+        if (getText.localeCompare("tnt") == 0) {
+            tnt();
+        }
+
+        else if (getText.localeCompare("justdoit") == 0) {
+            justdoit();
+        }
+
+        else if (getText.localeCompare("stop") == 0) {
+            stop();
+        }
+
+        else if (getText.localeCompare("ineedsomemoney") == 0) {
+            moneyFunction();
+        }
+
+        else if (getText.localeCompare("givemepoints") == 0) {
+            score = 999999999;
+        }
+
+        e.preventDefault();
+    });
+
+    init();
 }));
