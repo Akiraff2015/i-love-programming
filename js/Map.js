@@ -1,18 +1,24 @@
 ($(function() {
+
+    //IMAGE PROPERTIES
     var tilesetImage = new Image();
     tilesetImage.src = 'img/tiles3.png';
     var TILE_SIZE = 32;
     var imageNumTiles = 6;
 
+    //CANVAS - RENDER
     var canvas = document.getElementById('main');
     var ctx = canvas.getContext('2d');
 
+    //CANVAS - BUFFER
     var bufferImage = document.getElementById('render');
     var ctxBuffer = bufferImage.getContext('2d');
 
-    var yPosition = 4;
-    var xPosition = 2;
+    //GLOBAL GAME PROPERTIES
+    var score = 0;
+    var money = 0;
 
+    //DEFAULT MAP GENERATOR
     var map = [
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
@@ -67,15 +73,15 @@
         var tileType = [borderRock, greenOre, blueRock];
         var rand = Math.random();
         if (tileType[1].getProbability() > rand) {
-            return tileType[1].getId();
+            return tileType[1];
         }
 
         if (tileType[2].getProbability() > rand) {
-            return tileType[2].getId();
+            return tileType[2];
         }
 
         else {
-            return tileType[0].getId();
+            return tileType[0];
         }
     }
 
@@ -85,7 +91,7 @@
 
         //Generate random tile for each column.
         for (var i = 0; i < map[0].length; i++ ) {
-            tempRowMap.push(buildTile());
+            tempRowMap.push(buildTile().getId());
         }
         return tempRowMap;
     }
@@ -99,10 +105,10 @@
 
     //TODO: Detect collision between the rocks.
     function detectCollision(row, col) {
-        console.log("TEST ", map[row][col]);
-
+        //console.log("TEST ", map[row][col]);
         //IF WALKABLE
             //BREAK THE ROCK
+
             //ADD POINTS
             //REPLACE AIR BLOCK
 
@@ -117,21 +123,42 @@
 
     function move(){
         var playerPos = flareon.getPosition();
+        var positionValue = map[playerPos.row][playerPos.col];
 
-        detectCollision(playerPos.row, playerPos.col);
+        //UPDATE SCORE and MONEY
+        switch(positionValue) {
+            case blueRock.getId():
+                money += blueRock.getPrice();
+                score += blueRock.getScore();
+                break;
 
+            case greenOre.getId():
+                money += greenOre.getPrice();
+                score += greenOre.getScore();
+                break;
+
+            case grass.getId():
+                score += grass.getScore();
+                break;
+
+            case borderRock.getId():
+                score += borderRock.getScore();
+                break;
+
+            default:
+                console.log("Score: ", score);
+                console.log("Money: ", money);
+        }
         map[playerPos.row][playerPos.col] = flareon.getId();
         drawMap(map,null);
+
     }
 
     function keyboard() {
         document.addEventListener('keydown', function (e) {
 
-            //TODO: Convert to switch
             var keyValue = e.keyCode;
-
             clearPlayerSquare();
-
             switch(keyValue) {
                 case 65:
                     flareon.left();
@@ -146,7 +173,8 @@
                     flareon.right();
                     break;
                 default:
-                    console.log("Hey! Wrong keyboard");
+                    console.log(keyValue);
+                    //console.log("Hey! Wrong keyboard");
             }
             move();
         });

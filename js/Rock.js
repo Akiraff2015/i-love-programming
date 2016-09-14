@@ -1,13 +1,14 @@
 /**
  * Created by Akira on 9/12/2016.
  */
-var Rock = function (name, price, breakable, id, chance, walkable) {
+var Rock = function (name, price, breakable, id, chance, walkable, score) {
     //Properties of rock
     this.name = name;
     this.price = price;
+    this.score = score;
     this.id = id;
     this.chance = chance;
-    this.walkable = true;
+    this.walkable = false;
 
     this.position = {
         "row": 0,
@@ -20,6 +21,14 @@ var Rock = function (name, price, breakable, id, chance, walkable) {
 //    var chance = (currentRow/rows) * this.chance;
 //    return chance;
 //};
+
+Rock.prototype.getScore = function() {
+    return this.score;
+};
+
+Rock.prototype.getPrice = function() {
+    return this.price;
+};
 
 Rock.prototype.getId = function() {
     return this.id;
@@ -34,21 +43,19 @@ Rock.prototype.getProbability = function () {
 };
 
 //Grass
-var grass = new Rock("Grass", 0, true, 7, 1);
+var grass = new Rock("Grass", 0, true, 7, 1, null, 20);
 
 //Air Block
-var test10 = new Rock("Test10", 0, false, 10, 1);
+var test10 = new Rock("Test10", 0, false, 10, 1, null, 0);
 
 //Rock
-var borderRock = new Rock("Border Rock", 0, true, 19, 0.2);
-console.log(borderRock.getWalkable());
+var borderRock = new Rock("Border Rock", 0, true, 19, 0.2, null, 20);
+
 //Ice
-var ice = new Rock("Ice", 100, true, 18, 0.11);
+var ice = new Rock("Ice", 100, true, 18, 0.11, null, 100);
 
 //Green rock
-var greenOre = new Rock("Green Ore", 100, true, 9, 0.1);
+var greenOre = new Rock("Green Ore", 100, true, 9, 0.1, null, 750);
 
 //Blue Rock
-var blueRock = new Rock("Blue Rock", 2000, true, 36, 0.11);
-
-var tiles = new Rock("Tiles", -1, false, -1, 0);
+var blueRock = new Rock("Blue Rock", 2000, true, 36, 0.11, 1500);

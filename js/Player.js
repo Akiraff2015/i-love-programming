@@ -16,23 +16,23 @@ Player.prototype.getId = function () {
 
 Player.prototype.down = function () {
     this.position.row++;
-    console.log("Player x: " + this.position.col + " y: " + this.position.row);
+    console.log(" Player (col)x: " + this.position.col + " (row)y: " + this.position.row);
 
 };
 
 Player.prototype.up = function () {
     this.position.row--;
-    console.log("Player x: " + this.position.col + " y: " + this.position.row);
+    console.log(" Player (col)x: " + this.position.col + " (row)y: " + this.position.row);
 };
 
 Player.prototype.left = function () {
     this.position.col--;
-    console.log(" Player x: " + this.position.col + " y: " + this.position.row);
+    console.log(" Player (col)x: " + this.position.col + " (row)y: " + this.position.row);
 };
 
 Player.prototype.right = function () {
     this.position.col++;
-    console.log(" Player x: " + this.position.col + " y: " + this.position.row);
+    console.log(" Player (col)x: " + this.position.col + " (row)y: " + this.position.row);
 };
 
 Player.prototype.getPosition = function(){
