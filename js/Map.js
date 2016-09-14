@@ -10,13 +10,13 @@
     var bufferImage = document.getElementById('render');
     var ctxBuffer = bufferImage.getContext('2d');
 
-    var yPosition = 0;
-    var xPosition = 0;
+    var yPosition = 4;
+    var xPosition = 2;
 
     var map = [
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
         [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
-        [flareon.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
+        [test10.getId(), test10.getId(), test10.getId(), test10.getId(), flareon.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
         [grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId(),grass.getId()]
     ];
 
@@ -97,55 +97,60 @@
     //    console.log(yPosition);
     //}
 
-    function keyboard() {
-        document.addEventListener('keydown', function (e) {
-            //Press 'a'
-            if (e.keyCode == 65) {
-                map[2+xPosition][0
-                    ] = 14;
-                drawMap(map, 0);
-                xPosition--;
-            }
+    //TODO: Detect collision between the rocks.
+    function detectCollision(row, col) {
+        console.log("TEST ", map[row][col]);
 
-            //TODO: Able to move down
-            //Press 's'
-            if (e.keyCode == 83) {
-                map[2+xPosition][0] = 14;
-                drawMap(map, 0);
-                xPosition++;
-            }
+        //IF WALKABLE
+            //BREAK THE ROCK
+            //ADD POINTS
+            //REPLACE AIR BLOCK
 
-            //Press 'w'
-            if (e.keyCode == 87) {
-                map[2][yPosition] = 14;
-                drawMap(map, 0);
-                yPosition--;
-
-            }
-
-            //Press 'd'
-            if (e.keyCode == 68) {
-                map[2][yPosition] = 14;
-                drawMap(map, 0);
-                yPosition++;
-            }
-        });
+        //ELSE
     }
 
-    //FPS
-    window.requestAnimFrame = (function () {
-        return window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 1000 / 60);
-            };
-    })();
+    function clearPlayerSquare(){
+        var playerPos = flareon.getPosition();
+        map[playerPos.row][playerPos.col] = test10.getId();
+        drawMap(map,null);
+    }
 
-    //Animation Handler
-    (function animloop() {
-        requestAnimFrame(animloop);
-    })();
+    function move(){
+        var playerPos = flareon.getPosition();
+
+        detectCollision(playerPos.row, playerPos.col);
+
+        map[playerPos.row][playerPos.col] = flareon.getId();
+        drawMap(map,null);
+    }
+
+    function keyboard() {
+        document.addEventListener('keydown', function (e) {
+
+            //TODO: Convert to switch
+            var keyValue = e.keyCode;
+
+            clearPlayerSquare();
+
+            switch(keyValue) {
+                case 65:
+                    flareon.left();
+                    break;
+                case 83:
+                    flareon.down();
+                    break;
+                case 87:
+                    flareon.up();
+                    break;
+                case 68:
+                    flareon.right();
+                    break;
+                default:
+                    console.log("Hey! Wrong keyboard");
+            }
+            move();
+        });
+    }
 
     keyboard();
     for (var i = 0; i < 20; i++) {
