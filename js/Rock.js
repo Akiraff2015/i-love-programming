@@ -8,6 +8,11 @@ var Rock = function (name, price, breakable, id, chance, walkable) {
     this.id = id;
     this.chance = chance;
     this.walkable = true;
+
+    this.position = {
+        "row": 0,
+        "col": 0
+    };
 };
 
 //TODO: find the probability being spawned on a different spawn
@@ -45,3 +50,5 @@ var greenOre = new Rock("Green Ore", 100, true, 9, 0.1);
 
 //Blue Rock
 var blueRock = new Rock("Blue Rock", 2000, true, 36, 0.11);
+
+var tiles = new Rock("Tiles", -1, false, -1, 0);
