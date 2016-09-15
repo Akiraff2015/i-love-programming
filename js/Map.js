@@ -21,6 +21,7 @@
     var score = 0;
     var money = 0;
     var playerPos = flareon.getPosition();
+    var tileType = [borderRock, greenOre, blueRock];
 
     //DEFAULT MAP GENERATOR
     var map = [
@@ -93,7 +94,6 @@
 
     //Gives a probability of a chance, of a tile being placed.
     function buildTile() {
-        var tileType = [borderRock, greenOre, blueRock];
         var rand = Math.random();
         if (tileType[1].getProbability() > rand) {
             return tileType[1];
