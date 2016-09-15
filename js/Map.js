@@ -20,6 +20,7 @@
     //GLOBAL GAME PROPERTIES
     var score = 0;
     var money = 0;
+    var thisisalongbomb = 10;
     var playerPos = flareon.getPosition();
     var tileType = [borderRock, greenOre, blueRock];
 
@@ -31,6 +32,7 @@
         [grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId()]
     ];
     var mainSong = new Audio("sound/8bit-adventure.mp3");
+
     function playMainSong() {
         mainSong.play();
         mainSong.loop = true;
@@ -49,6 +51,10 @@
         for (var i = 0; i < 20; i++) {
             drawMap(generateRow(), 1);
         }
+    }
+
+    function drawMenu() {
+        ctx.fillRect(50, 50, 100, 100);
     }
 
     function drawMap(getMapRow, condition) {
@@ -140,7 +146,7 @@
             playerPos.row = 1;
         }
 
-        else  if (playerPos.row >= 19) {
+        else if (playerPos.row >= 19) {
             playerPos.row = 19;
         }
     }
@@ -149,6 +155,17 @@
         playerPos = flareon.getPosition();
         map[playerPos.row][playerPos.col] = test10.getId();
         drawMap(map, null);
+    }
+
+    function explosion() {
+        playerPos = flareon.getPosition();
+        map[playerPos.row][playerPos.col] = test10.getId();
+        map[playerPos.row+1][playerPos.col] = test10.getId();
+        map[playerPos.row-1][playerPos.col] = test10.getId();
+        map[playerPos.row][playerPos.col-1] = test10.getId();
+        map[playerPos.row][playerPos.col+1] = test10.getId();
+        drawMap(map, null);
+
     }
 
     function move() {
@@ -189,8 +206,16 @@
         ctx.font = "12px Arial";
         ctx.fillText("Score: " + score, 0, 20);
         ctx.fillText("Money: $" + money, 400, 20);
+
         ctx.fillText("x: " + getPos.col, 810, 20);
         ctx.fillText("y: " + getPos.row, 850, 20);
+
+        var bombImg = new Image();
+        bombImg.src = "img/bomb.png";
+        ctx.drawImage(bombImg, 200, 0);
+
+        ctx.font = "24px Arial";
+        ctx.fillText(thisisalongbomb, 240, 25);
     }
 
     function keyboard() {
@@ -199,18 +224,43 @@
             var keyValue = e.keyCode;
             clearPlayerSquare();
             switch (keyValue) {
+                //t
+                case 84:
+                    if (thisisalongbomb > 0) {
+                        tnt();
+                        explosion();
+                        thisisalongbomb--;
+                    }
+                    else {
+                       thisisalongbomb = 0;
+                    }
+                    break;
+                //a
                 case 65:
                     flareon.left();
                     break;
+                //b
+                case 66:
+                    if (money >= 1000) {
+                        thisisalongbomb += 1;
+                        money -= 1000;
+                    }
+                    break;
+                //s
                 case 83:
                     flareon.down();
                     break;
+                //w
                 case 87:
                     flareon.up();
                     break;
+                //d
                 case 68:
                     flareon.right();
                     break;
+                //esc
+                case 27:
+                    console.log("hello world");
                 default:
                     console.log(keyValue);
                 //console.log("Hey! Wrong keyboard");
@@ -261,7 +311,6 @@
 
         if (getText.localeCompare("tnt") == 0) {
             tnt();
-
         }
 
         else if (getText.localeCompare("justdoit") == 0) {
@@ -284,6 +333,10 @@
 
         else if (getText.localeCompare("playsong") == 0) {
             playMainSong();
+        }
+
+        else if (getText.localeCompare("bomberman") == 0) {
+            thisisalongbomb = 999;
         }
 
         e.preventDefault();
