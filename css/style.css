@@ -40,3 +40,18 @@ canvas {
 .clear-float {
     clear: both;
 }
+
+.half-img {
+    width:50%;
+    height:50%;
+}
+
+.img-1-4 {
+    width:25%;
+    height:25%;
+}
+
+.center-img {
+    display:block;
+    margin: 0 auto;
+}
