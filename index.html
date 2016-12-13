@@ -5,71 +5,77 @@
         <title>Just Mine It</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <script type="text/javascript" src="lib/jquery-3.1.0.min.js"></script>
+        <script type="text/javascript" src="lib/underscore-min.js"></script>
         <script type="text/javascript" src="js/Map.js"></script>
         <script type="text/javascript" src="js/Rock.js"></script>
         <script type="text/javascript" src="js/Player.js"></script>
     </head>
 
     <body>
-        <h1>Just Mine It <span class="smaller">ALPHA STAGE</span></h1>
-        <aside id="sidebar">
-            <article>
-                <h1>Instruction</h1>
-                <ul>
-                    <li>Press WASD key to move your character.</li>
-                    <img class="half-img center-img" src="img/wasd.png">
+        <!--<h1>Just Mine It <span class="smaller">ALPHA STAGE</span></h1>-->
+        <!--<aside id="sidebar">-->
+            <!--<article>-->
+                <!--<h1>Instruction</h1>-->
+                <!--<ul>-->
+                    <!--<li>Press WASD key to move your character.</li>-->
+                    <!--<img class="half-img center-img" src="img/wasd.png">-->
 
-                    <li>Press T to explode with a bomb!</li>
-                    <img class="img-1-4 center-img" src="img/t-keyboard.png">
+                    <!--<li>Press T to explode with a bomb!</li>-->
+                    <!--<img class="img-1-4 center-img" src="img/t-keyboard.png">-->
 
-                    <li>Press B to buy bombs!</li>
-                    <img class="img-1-4 center-img" src="img/b-keyboard.png">
-                </ul>
-            </article>
+                    <!--<li>Press B to buy bombs!</li>-->
+                    <!--<img class="img-1-4 center-img" src="img/b-keyboard.png">-->
+                <!--</ul>-->
+            <!--</article>-->
 
-            <article>
-                <h1>Need some music?</h1>
-                <p>Type in the command box:</p>
-                <ul>
-                    <li>justdoit</li>
-                    <li>stop</li>
-                    <li>mute</li>
-                    <li>tnt</li>
-                    <li>playsong</li>
-                </ul>
-            </article>
+            <!--<article>-->
+                <!--<h1>Need some music?</h1>-->
+                <!--<p>Type in the command box:</p>-->
+                <!--<ul>-->
+                    <!--<li>justdoit</li>-->
+                    <!--<li>stop</li>-->
+                    <!--<li>mute</li>-->
+                    <!--<li>tnt</li>-->
+                    <!--<li>playsong</li>-->
+                <!--</ul>-->
+            <!--</article>-->
 
-            <form id="commandForm">
-                <label for="getText">Just do it:</label>
-                <input autocomplete="off" type="text" id="getText">
-                <input type="submit" value="Fire Up!" id="submitButton">
-            </form>
+            <!--<form id="commandForm">-->
+                <!--<label for="getText">Just do it:</label>-->
+                <!--<input autocomplete="off" type="text" id="getText">-->
+                <!--<p>Press the 'enter' keyboard to hit the command.</p>-->
+                <!--&lt;!&ndash;<input type="submit" value="Fire Up!" id="submitButton">&ndash;&gt;-->
+            <!--</form>-->
 
-            <section class="clear-float">
-                <article>
-                    <h1>Just Mine It</h1>
-                    <p>Just Mine It, is a game that you are suppose to mine! "Well no shit there Sherlock!"
-                        It is not a ripoff game from Minecraft! Think this sidebar as a TODO list, that "me" the
-                        creator would like to add before making into the beta stage!</p>
+            <!--<section class="clear-float">-->
+                <!--<article>-->
+                    <!--<h1>Just Mine It</h1>-->
+                    <!--<p>Just Mine It, is a game that you are suppose to mine! "Well no shit there Sherlock!"-->
+                        <!--It is not a ripoff game from Minecraft! Think this sidebar as a TODO list, that "me" the-->
+                        <!--creator would like to add before making into the beta stage!</p>-->
 
-                    <p>In the year where humans finally decides to take-off, and further invest into space
-                        exploration, due to lack of resources that Earth has to provide. Our astronuts, will
-                        need to explore intergalatic planets in order to collect resources.</p>
-                </article>
+                    <!--<p>In the year where humans finally decides to take-off, and further invest into space-->
+                        <!--exploration, due to lack of resources that Earth has to provide. Our astronuts, will-->
+                        <!--need to explore intergalatic planets in order to collect resources.</p>-->
+                <!--</article>-->
 
-                <article>
-                    <h1>TODO List</h1>
-                    <ul>
-                        <li>Add a shop</li>
-                        <li>Add health bar</li>
-                        <li>Able to customize</li>
-                        <li>Able to dig deeper!</li>
-                        <li>Add TNT!</li>
-                    </ul>
-                </article>
-            </section>
-        </aside>
+                <!--<article>-->
+                    <!--<h1>TODO List</h1>-->
+                    <!--<ul>-->
+                        <!--<li class="strike-through">Add a shop</li>-->
+                        <!--<li>Add health bar</li>-->
+                        <!--<li>Able to customize</li>-->
+                        <!--<li>Able to dig deeper!</li>-->
+                        <!--<li class="strike-through">Add TNT!</li>-->
+                    <!--</ul>-->
+                <!--</article>-->
+            <!--</section>-->
+        <!--</aside>-->
 
+        <div class="cursor-pointer" id="bombSquare"></div>
+        <div class="cursor-pointer" id="moneySquare"></div>
+        <div class="no-select cursor-pointer" id="exitButton"><span class="center-text">X</span></div>
+        <canvas id="shop" width="896" height="640"></canvas>
         <canvas id="main" width="896" height="640"></canvas>
          <!--TODO: Make it disappear?-->
         <canvas id="render" width="1024" height="640"></canvas>

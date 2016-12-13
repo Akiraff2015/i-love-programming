@@ -3,11 +3,28 @@
  */
 ($(function () {
 
+    var shopBox = {
+        bombButton: '#bombSquare',
+        moneyButton: '#moneySquare',
+        exitButton: '#exitButton'
+    };
+
+    _.each(shopBox, (obj) => $(obj).css({'display':'none'}));
+
+    var imageSetting = {
+        TILE_SIZE: 32,
+        imageNumTiles: 6
+    };
+
+    var gameSetting = {
+        score: 0,
+        money: 0,
+        bomb: 10
+    };
+
     //IMAGE PROPERTIES
     var tilesetImage = new Image();
     tilesetImage.src = 'img/tiles3.png';
-    var TILE_SIZE = 32;
-    var imageNumTiles = 6;
 
     //CANVAS - RENDER
     var canvas = document.getElementById('main');
@@ -17,20 +34,27 @@
     var bufferImage = document.getElementById('render');
     var ctxBuffer = bufferImage.getContext('2d');
 
-    //GLOBAL GAME PROPERTIES
-    var score = 0;
-    var money = 0;
-    var thisisalongbomb = 10;
+    //Canvas - Shop
+    var canvasShop = document.getElementById('shop');
+    var ctxShop = canvasShop.getContext('2d');
+
     var playerPos = flareon.getPosition();
     var tileType = [borderRock, greenOre, blueRock];
 
     //DEFAULT MAP GENERATOR
-    var map = [
-        [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
-        [test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
-        [test10.getId(), test10.getId(), test10.getId(), test10.getId(), flareon.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId(), test10.getId()],
-        [grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId(), grass.getId()]
-    ];
+
+    var map = [];
+
+    for (var i = 0; i < 3; i++) {
+        map.push([]);
+    }
+    for (var col= 0; col < 28; col++) {
+        map[0].push(test10.getId());
+        map[1].push(test10.getId());
+        map[2].push(grass.getId());
+    }
+    console.log(map);
+
     var mainSong = new Audio("sound/8bit-adventure.mp3");
 
     function playMainSong() {
@@ -53,10 +77,6 @@
         }
     }
 
-    function drawMenu() {
-        ctx.fillRect(50, 50, 100, 100);
-    }
-
     function drawMap(getMapRow, condition) {
         if (condition == 1) {
             map.push(getMapRow);
@@ -67,9 +87,12 @@
             for (var r = 0; r < rowTileCount; r++) {
                 for (var c = 0; c < colTileCount; c++) {
                     var tile = map[r][c];
-                    var tileRow = (tile / imageNumTiles) | 0;
-                    var tileCol = (tile % imageNumTiles) | 0;
-                    ctx.drawImage(tilesetImage, (tileCol * TILE_SIZE), (tileRow * TILE_SIZE), TILE_SIZE, TILE_SIZE, (c * TILE_SIZE), (r * TILE_SIZE), TILE_SIZE, TILE_SIZE);
+                    var tileRow = (tile / imageSetting.imageNumTiles) | 0;
+                    var tileCol = (tile % imageSetting.imageNumTiles) | 0;
+                    ctx.drawImage(tilesetImage, (tileCol * imageSetting.TILE_SIZE),
+                        (tileRow * imageSetting.TILE_SIZE), imageSetting.TILE_SIZE,
+                        imageSetting.TILE_SIZE, (c * imageSetting.TILE_SIZE), (r * imageSetting.TILE_SIZE),
+                        imageSetting.TILE_SIZE, imageSetting.TILE_SIZE);
                 }
             }
         }
@@ -82,9 +105,11 @@
             for (var r = 0; r < row; r++) {
                 for (var c = 0; c < col; c++) {
                     var tile = map[r][c];
-                    var tileRow = (tile / imageNumTiles) | 0;
-                    var tileCol = (tile % imageNumTiles) | 0;
-                    ctx.drawImage(tilesetImage, (tileCol * TILE_SIZE), (tileRow * TILE_SIZE), TILE_SIZE, TILE_SIZE, (c * TILE_SIZE), (r * TILE_SIZE), TILE_SIZE, TILE_SIZE);
+                    var tileRow = (tile / imageSetting.imageNumTiles) | 0;
+                    var tileCol = (tile % imageSetting.imageNumTiles) | 0;
+                    ctx.drawImage(tilesetImage, (tileCol * imageSetting.TILE_SIZE), (tileRow * imageSetting.TILE_SIZE),
+                        imageSetting.TILE_SIZE, imageSetting.TILE_SIZE, (c * imageSetting.TILE_SIZE),
+                        (r * imageSetting.TILE_SIZE), imageSetting.TILE_SIZE, imageSetting.TILE_SIZE);
                 }
             }
         }
@@ -124,13 +149,6 @@
         }
         return tempRowMap;
     }
-
-    //TODO: Generate new rows
-    //function moveMap() {
-    //    yPosition--;
-    //    translate(0, yPosition);
-    //    console.log(yPosition);
-    //}
 
     //TODO: Detect collision between the rocks.
     function detectCollision() {
@@ -176,26 +194,26 @@
 
         switch (positionValue) {
             case blueRock.getId():
-                money += blueRock.getPrice();
-                score += blueRock.getScore();
+                gameSetting.money += blueRock.getPrice();
+                gameSetting.score += blueRock.getScore();
                 break;
 
             case greenOre.getId():
-                money += greenOre.getPrice();
-                score += greenOre.getScore();
+                gameSetting.money += greenOre.getPrice();
+                gameSetting.score += greenOre.getScore();
                 break;
 
             case grass.getId():
-                score += grass.getScore();
+                gameSetting.score += grass.getScore();
                 break;
 
             case borderRock.getId():
-                score += borderRock.getScore();
+                gameSetting.score += borderRock.getScore();
                 break;
 
             default:
-                console.log("Score: ", score);
-                console.log("Money: ", money);
+                console.log("Score: ", gameSetting.score);
+                console.log("Money: ", gameSetting.money);
         }
         map[playerPos.row][playerPos.col] = flareon.getId();
         drawMap(map, null);
@@ -204,8 +222,8 @@
     function drawScore() {
         var getPos = flareon.getPosition();
         ctx.font = "12px Arial";
-        ctx.fillText("Score: " + score, 0, 20);
-        ctx.fillText("Money: $" + money, 400, 20);
+        ctx.fillText("Score: " + gameSetting.score, 0, 20);
+        ctx.fillText("Money: $" + gameSetting.money, 400, 20);
 
         ctx.fillText("x: " + getPos.col, 810, 20);
         ctx.fillText("y: " + getPos.row, 850, 20);
@@ -215,7 +233,7 @@
         ctx.drawImage(bombImg, 200, 0);
 
         ctx.font = "24px Arial";
-        ctx.fillText(thisisalongbomb, 240, 25);
+        ctx.fillText(gameSetting.bomb, 240, 25);
     }
 
     function keyboard() {
@@ -226,13 +244,13 @@
             switch (keyValue) {
                 //t
                 case 84:
-                    if (thisisalongbomb > 0) {
+                    if (gameSetting.bomb > 0) {
                         tnt();
                         explosion();
-                        thisisalongbomb--;
+                        gameSetting.bomb--;
                     }
                     else {
-                       thisisalongbomb = 0;
+                        gameSetting.bomb = 0;
                     }
                     break;
                 //a
@@ -241,9 +259,9 @@
                     break;
                 //b
                 case 66:
-                    if (money >= 1000) {
-                        thisisalongbomb += 1;
-                        money -= 1000;
+                    if (gameSetting.money >= 1000) {
+                        gameSetting.bomb += 1;
+                        gameSetting.money -= 1000;
                     }
                     break;
                 //s
@@ -258,15 +276,25 @@
                 case 68:
                     flareon.right();
                     break;
-                //esc
-                case 27:
-                    console.log("hello world");
+
+                case 88:
+                    console.log("This is the shop!");
+                    drawMenu();
+                    break;
+
                 default:
                     console.log(keyValue);
-                //console.log("Hey! Wrong keyboard");
             }
             move();
         });
+    }
+
+    //Shop Menu
+    function drawMenu() {
+        ctxShop.fillRect(96,120,800,400);
+        ctxShop.font="30px Georgia";
+        ctxShop.fillStyle="#ffffff";
+        ctxShop.fillText("Shop", 98, 150);
     }
 
     function tnt() {
@@ -288,7 +316,7 @@
     }
 
     function moneyFunction() {
-        money = 999999999;
+        gameSetting.money = 999999999;
         moneySound.play();
     }
 
@@ -306,6 +334,7 @@
         drawScore();
     })();
 
+    //commands
     $("#commandForm").submit(function (e) {
         var getText = $("#getText").val();
 
@@ -324,7 +353,7 @@
         }
 
         else if (getText.localeCompare("givemepoints") == 0) {
-            score = 999999999;
+            gameSetting.score = 999999999;
         }
 
         else if (getText.localeCompare("mute") == 0) {
@@ -336,7 +365,13 @@
         }
 
         else if (getText.localeCompare("bomberman") == 0) {
-            thisisalongbomb = 999;
+            gameSetting.bomb = 999;
+        }
+
+        else if (getText.localeCompare("givemeeverything") == 0) {
+            gameSetting.bomb = 999;
+            gameSetting.score = 999999999;
+            gameSetting.money = 999999999;
         }
 
         e.preventDefault();

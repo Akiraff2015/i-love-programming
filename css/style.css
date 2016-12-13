@@ -1,5 +1,72 @@
-canvas {
-    display:block;
+#shop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+}
+
+#render {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+#main {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+}
+
+#bombSquare {
+    position: absolute;
+    left: 100px;
+    top: 170px;
+    z-index: 3;
+    width: 100px;
+    height: 100px;
+    background: #ffff00;
+}
+
+#moneySquare {
+    position: absolute;
+    left: 220px;
+    top: 170px;
+    z-index: 3;
+    width: 100px;
+    height: 100px;
+    background: #ff0000;
+}
+
+#exitButton {
+    position: absolute;
+    left: 855px;
+    top: 130px;
+    z-index: 3;
+    width: 30px;
+    height: 30px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.center-text {
+    max-width: 50%;
 }
 
 .smaller {
@@ -54,4 +121,8 @@ canvas {
 .center-img {
     display:block;
     margin: 0 auto;
+}
+
+.strike-through {
+    text-decoration: line-through;
 }
